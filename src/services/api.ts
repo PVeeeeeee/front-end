@@ -77,13 +77,39 @@ export type Product = {
   descricao: string
 }
 
+// Frontend payload shapes (used in forms/contexts)
+export type NewClientPayload = {
+  name?: string
+  phone?: string
+  address?: {
+    neighborhood?: string
+    street?: string
+    number?: string
+  }
+  email?: string
+}
+
+export type NewProductPayload = {
+  name?: string
+  value?: number
+  description?: string
+}
+
 export async function getClients(): Promise<Client[]> {
   const response = await api.get<Client[]>('clients/')
   return response.data
 }
 
-export async function createClient(payload: Omit<Client, 'id'>): Promise<Client> {
-  const response = await api.post<Client>('clients/', payload)
+export async function createClient(payload: NewClientPayload): Promise<Client> {
+  const body = {
+    nome: payload.name || '',
+    telefone: payload.phone || '',
+    bairro: payload.address?.neighborhood || '',
+    logradouro: payload.address?.street || '',
+    numero: payload.address?.number || '',
+    email: payload.email || '',
+  }
+  const response = await api.post<Client>('clients/', body)
   return response.data
 }
 
@@ -92,7 +118,12 @@ export async function getProducts(): Promise<Product[]> {
   return response.data
 }
 
-export async function createProduct(payload: Omit<Product, 'id'>): Promise<Product> {
-  const response = await api.post<Product>('products/', payload)
+export async function createProduct(payload: NewProductPayload): Promise<Product> {
+  const body = {
+    nome: payload.name || '',
+    valor: payload.value ?? 0,
+    descricao: payload.description || '',
+  }
+  const response = await api.post<Product>('products/', body)
   return response.data
 }
