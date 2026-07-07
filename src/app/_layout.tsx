@@ -1,5 +1,5 @@
 import "../../global.css";
-import { Stack, Slot } from "expo-router";
+import { Stack } from "expo-router";
 
 export default function Layout() {
 
@@ -11,8 +11,6 @@ export default function Layout() {
           backgroundColor: '#F6F6F6'
         }
       }}
-    >
-      <Slot/>
-    </Stack>
+    />
   )
 }
