@@ -49,6 +49,12 @@ export default function Reports(){
                         </View>
                         <Text className="text-cinza-300 text-2xl">Histórico</Text>
                     </Card>
+                    <Card onPress={() => router.push("/formaPagamento")} className="gap-4" backgroundColor="#FFFFF2" borderColor="cinza-200">
+                        <View className="p-2 bg-cinza-300/50 rounded-md w-1/6 justify-center items-center">
+                            <Feather name="credit-card" size={28} color="#333333"/>
+                        </View>
+                        <Text className="text-cinza-300 text-2xl">Formas de Pagamento</Text>
+                    </Card>
                 </View>
             </View>
         </ScrollView>

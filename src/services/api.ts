@@ -82,6 +82,11 @@ export type Product = {
   descricao: string
 }
 
+export type PaymentMethod = {
+  id: number
+  nome: string
+}
+
 // Frontend payload shapes (used in forms/contexts)
 export type NewClientPayload = {
   nome?: string
@@ -99,6 +104,11 @@ export type NewProductPayload = {
   nome?: string
   valor?: number
   descricao?: string
+}
+
+export type NewPaymentMethodPayload = {
+  id?: number
+  nome?: string
 }
 
 export type UserProfile = {
@@ -217,6 +227,19 @@ export async function deleteProduct(id: number): Promise<void> {
   )
 
 }
+export async function createPayment(payload: NewPaymentMethodPayload): Promise<PaymentMethod> {
+  const body = {
+    nome: payload.nome || '',
+  }
+  const response = await api.post<PaymentMethod>('formas/', body)
+  return response.data
+}
+
+export async function getPaymentMethods(): Promise<PaymentMethod[]> {
+
+  const response = await api.get<{results: PaymentMethod[]}>('formas/')
+  return response.data.results
+}
 
 export async function registerUser(payload: RegisterUserPayload): Promise<UserProfile & { message?: string }> {
   const body = {
@@ -249,3 +272,4 @@ export async function createProduct(payload: NewProductPayload): Promise<Product
   const response = await api.post<Product>('produtos/', body)
   return response.data
 }
+
