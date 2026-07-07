@@ -143,6 +143,28 @@ export async function createClient(payload: NewClientPayload): Promise<Client> {
   return response.data
 }
 
+export async function updateClient(
+  id: number,
+  payload: NewClientPayload
+): Promise<Client> {
+
+  const body = {
+    nome: payload.nome || '',
+    telefone: payload.telefone || '',
+    bairro: payload.endereco?.bairro || '',
+    logradouro: payload.endereco?.logradouro || '',
+    numero: payload.endereco?.numero || '',
+    email: payload.email || '',
+  }
+
+  const response = await api.put<Client>(
+    `clientes/${id}/`,
+    body
+  )
+
+  return response.data
+}
+
 export async function getProducts(
   search?: string,
   ordering?: string,

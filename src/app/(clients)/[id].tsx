@@ -56,7 +56,7 @@ export default function ClientDetails(){
                         <Text className="self-start text-preto font-bold text-2xl">{client.logradouro}, {client.numero}, {client.bairro}</Text>
                     </View>
                     <View className="w-full gap-4">
-                        <Button label="Editar" color="text-branco-100" background="bg-vermelho-200"/>
+                        <Button onPress={() => router.push(`/edit/${client.id}`)} label="Editar" color="text-branco-100" background="bg-vermelho-200"/>
                         <Button className="border-2 border-vermelho-100 rounded-lg" label="Excluir" color="text-vermelho-100" background="bg-transparent"/>
                     </View>
                 </View>
