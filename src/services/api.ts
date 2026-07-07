@@ -84,12 +84,12 @@ export type Product = {
 
 // Frontend payload shapes (used in forms/contexts)
 export type NewClientPayload = {
-  name?: string
-  phone?: string
-  address?: {
-    neighborhood?: string
-    street?: string
-    number?: string
+  nome?: string
+  telefone?: string
+  endereco?: {
+    bairro?: string
+    logradouro?: string
+    numero?: string
   }
   email?: string
 }
@@ -124,23 +124,58 @@ export type UpdateMePayload = {
   saldo_online?: number | string
 }
 
-export async function getClients(): Promise<Client[]> {
-  const response = await api.get<Client[]>('clients/')
-  return response.data
+export async function getClients(search?: string, ordering?: string): Promise<Client[]> {
+  const params: any = {}
+
+  if (search) params.search = search
+  if (ordering) params.ordering = ordering
+
+  const response = await api.get<{ results: Client[] }>('clientes/', { params })
+  return response.data.results
 }
 
 
 export async function createClient(payload: NewClientPayload): Promise<Client> {
   const body = {
-    nome: payload.name || '',
-    telefone: payload.phone || '',
-    bairro: payload.address?.neighborhood || '',
-    logradouro: payload.address?.street || '',
-    numero: payload.address?.number || '',
+    nome: payload.nome || '',
+    telefone: payload.telefone || '',
+    bairro: payload.endereco?.bairro || '',
+    logradouro: payload.endereco?.logradouro || '',
+    numero: payload.endereco?.numero || '',
     email: payload.email || '',
   }
-  const response = await api.post<Client>('clients/', body)
+  const response = await api.post<Client>('clientes/', body)
   return response.data
+}
+
+export async function updateClient(
+  id: number,
+  payload: NewClientPayload
+): Promise<Client> {
+
+  const body = {
+    nome: payload.nome || '',
+    telefone: payload.telefone || '',
+    bairro: payload.endereco?.bairro || '',
+    logradouro: payload.endereco?.logradouro || '',
+    numero: payload.endereco?.numero || '',
+    email: payload.email || '',
+  }
+
+  const response = await api.put<Client>(
+    `clientes/${id}/`,
+    body
+  )
+
+  return response.data
+}
+
+export async function deleteClient(id: number): Promise<void> {
+
+  await api.delete(
+    `clientes/${id}/`
+  )
+
 }
 
 export async function getProducts(

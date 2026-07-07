@@ -103,9 +103,9 @@ export default function ProductDetails(){
                         </View>
                     </View>
                     <View className="w-full gap-4">
-                            <Button onPress={() => router.push(`/edit/${product.id}`)} label="Editar" color="text-branco-100" background="bg-amarelo"/>
-                            <Button onPress={() => setShowDeleteModal(true)} className="border-2 border-vermelho-100 rounded-lg" label="Excluir" color="text-vermelho-100" background="bg-transparent"/>
-                        </View>
+                        <Button onPress={() => router.push(`/edit/${product.id}`)} label="Editar" color="text-branco-100" background="bg-amarelo"/>
+                        <Button onPress={() => setShowDeleteModal(true)} className="border-2 border-vermelho-100 rounded-lg" label="Excluir" color="text-vermelho-100" background="bg-transparent"/>
+                    </View>
                 </View>
             </ScrollView>
         </View>
