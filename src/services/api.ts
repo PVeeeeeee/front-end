@@ -82,14 +82,19 @@ export type Product = {
   descricao: string
 }
 
+export type PaymentMethod = {
+  id: number
+  nome: string
+}
+
 // Frontend payload shapes (used in forms/contexts)
 export type NewClientPayload = {
-  name?: string
-  phone?: string
-  address?: {
-    neighborhood?: string
-    street?: string
-    number?: string
+  nome?: string
+  telefone?: string
+  endereco?: {
+    bairro?: string
+    logradouro?: string
+    numero?: string
   }
   email?: string
 }
@@ -99,6 +104,11 @@ export type NewProductPayload = {
   nome?: string
   valor?: number
   descricao?: string
+}
+
+export type NewPaymentMethodPayload = {
+  id?: number
+  nome?: string
 }
 
 export type UserProfile = {
@@ -137,23 +147,59 @@ type PaginatedResponse<T> = {
   results: T[]
 }
 
-export async function getClients(): Promise<Client[]> {
-  const response = await api.get<Client[]>('clientes/')
-  return response.data
+
+export async function getClients(search?: string, ordering?: string): Promise<Client[]> {
+  const params: any = {}
+
+  if (search) params.search = search
+  if (ordering) params.ordering = ordering
+
+  const response = await api.get<{ results: Client[] }>('clientes/', { params })
+  return response.data.results
+
 }
 
 
 export async function createClient(payload: NewClientPayload): Promise<Client> {
   const body = {
-    nome: payload.name || '',
-    telefone: payload.phone || '',
-    bairro: payload.address?.neighborhood || '',
-    logradouro: payload.address?.street || '',
-    numero: payload.address?.number || '',
+    nome: payload.nome || '',
+    telefone: payload.telefone || '',
+    bairro: payload.endereco?.bairro || '',
+    logradouro: payload.endereco?.logradouro || '',
+    numero: payload.endereco?.numero || '',
     email: payload.email || '',
   }
   const response = await api.post<Client>('clientes/', body)
   return response.data
+}
+
+export async function updateClient(
+  id: number,
+  payload: NewClientPayload
+): Promise<Client> {
+
+  const body = {
+    nome: payload.nome || '',
+    telefone: payload.telefone || '',
+    bairro: payload.endereco?.bairro || '',
+    logradouro: payload.endereco?.logradouro || '',
+    numero: payload.endereco?.numero || '',
+    email: payload.email || '',
+  }
+
+  const response = await api.put<Client>(
+    `clientes/${id}/`,
+    body
+  )
+  return response.data
+}
+
+export async function deleteClient(id: number): Promise<void> {
+
+  await api.delete(
+    `clientes/${id}/`
+  )
+
 }
 
 export async function getProducts(
@@ -195,6 +241,19 @@ export async function deleteProduct(id: number): Promise<void> {
   )
 
 }
+export async function createPayment(payload: NewPaymentMethodPayload): Promise<PaymentMethod> {
+  const body = {
+    nome: payload.nome || '',
+  }
+  const response = await api.post<PaymentMethod>('formas/', body)
+  return response.data
+}
+
+export async function getPaymentMethods(): Promise<PaymentMethod[]> {
+
+  const response = await api.get<{results: PaymentMethod[]}>('formas/')
+  return response.data.results
+}
 
 export async function registerUser(payload: RegisterUserPayload): Promise<UserProfile & { message?: string }> {
   const body = {
@@ -227,7 +286,6 @@ export async function createProduct(payload: NewProductPayload): Promise<Product
   const response = await api.post<Product>('produtos/', body)
   return response.data
 }
-
 
 function normalizeList<T>(data: T[] | PaginatedResponse<T>): T[] {
   if (Array.isArray(data)) return data

@@ -1,6 +1,5 @@
 import { View, Text, ScrollView } from "react-native"
 import { FilterButton } from "@/components/Button"
-import Calendar from "@/components/Calendar"
 import { Card } from "@/components/Card"
 import { Feather } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
@@ -37,7 +36,6 @@ export default function ProductsList(){
         <View className="w-full h-full">
             <ScrollView>
                 <View className="w-full px-10 h-full items-center self-center gap-5 py-10">
-                    <Calendar/>
                     <Input
                         label="Pesquisar produto"
                         value={search}
